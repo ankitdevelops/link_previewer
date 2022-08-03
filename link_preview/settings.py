@@ -27,7 +27,7 @@ environ.Env.read_env()
 SECRET_KEY = 'django-insecure-0takl1ve=-s-pl@f5g43y!8so4^=47rqt6(i@=!zcs#)=_7%*9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['https://linkdetails.herokuapp.com/']
 
@@ -76,8 +76,8 @@ WSGI_APPLICATION = 'link_preview.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-if DEBUG:
-    DATABASES = {
+# if DEBUG:
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': env('POSTGRES_DB_NAME'),
@@ -87,13 +87,13 @@ if DEBUG:
         'PORT': env('POSTGRES_PORT'),
     }
 }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+# else:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / 'db.sqlite3',
+#         }
+#     }
 
 
 # Password validation
