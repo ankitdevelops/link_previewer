@@ -66,7 +66,7 @@ def get_image(html_document):
             if i.get("src").startswith("https"):
                 image = i.get("src")
                 break
-    image = "https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg"
+        image = "https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg"
     return image
 
 
