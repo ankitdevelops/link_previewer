@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 
 def home(request):
     context = None
-    url = request.GET.get("url")
+    url = request.POST.get("url")
     if url:
         try:
             response = requests.get(url)
