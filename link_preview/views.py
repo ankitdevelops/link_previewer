@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from bs4 import BeautifulSoup
 import requests
 from django.core.validators import URLValidator
@@ -6,18 +6,21 @@ from django.core.exceptions import ValidationError
 
 
 def home(request):
+    context = None
     url = request.GET.get("url")
     if url:
-        response = requests.get(url)
-        html_document = BeautifulSoup(response.content, "html.parser")
-        context = {
-            "title": get_title(html_document),
-            "description": get_description(html_document),
-            "image": get_image(html_document),
-            "domain": get_domain(html_document,url),
-        }
-    else:
-        context = None
+        try:
+            response = requests.get(url)
+            html_document = BeautifulSoup(response.content, "html.parser")
+            context = {
+                "title": get_title(html_document),
+                "description": get_description(html_document),
+                "image": get_image(html_document),
+                "domain": get_domain(html_document,url),
+            }
+        except Exception as ex:
+            return redirect('home')
+    
     return render(request, "index.html", context)
 
 
@@ -29,8 +32,10 @@ def get_title(html_document):
         title = html_document.find("meta", property="twitter:title").get("content")
     elif html_document.title:
         title = html_document.title.string
-    else:
+    elif html_document.find("h1"):
         title = html_document.find("h1").string
+    else:
+        title = "No Title Found"
     return title
 
 
@@ -44,8 +49,10 @@ def get_description(html_document):
         description = html_document.find("meta", property="twitter:description").get(
             "content"
         )
-    else:
+    elif  html_document.find("p"):
         description = html_document.find("p").string
+    else:
+        description = "No Description Found"
     return description
 
 
@@ -59,7 +66,7 @@ def get_image(html_document):
             if i.get("src").startswith("https"):
                 image = i.get("src")
                 break
-        image = "https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg"
+    image = "https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg"
     return image
 
 
